@@ -1,0 +1,1106 @@
+:root {
+    --bg-main: #0b111e;          /* Deep navy premium dashboard background */
+    --panel-bg: #151f32;         /* Dark card background surface panels */
+    --sidebar-bg: #0f172a;       /* Dark charcoal layout depth tint */
+    --text-primary: #f8fafc;     /* Crisp white reading text values */
+    --text-muted: #94a3b8;       /* Clean muted slate metadata label gray */
+    --border-clean: #1e293b;     /* Delicate card border seam line grid */
+    
+    --pure-blue: #3b82f6;        /* Modern electrical cyan blue */
+    --pure-green: #10b981;       /* Mint success live engine status green */
+    --pure-red: #ef4444;         /* Coral alert status flag down red */
+    --warning-yellow: #f59e0b;   /* Warm dashboard orange warning tint */
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: -0.1px;
+}
+
+body { 
+    background-color: var(--bg-main); 
+    color: var(--text-primary); 
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Prevents double scrolling bars from breaking screen balance */
+}
+
+/* 1. MASTERFLEX BASE WRAPPER FOR NAVIGATION SIDEBAR GRID LINKING */
+.dashboard-root-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    max-height: 100vh;
+    max-width: 100vw;
+    overflow: hidden;
+}
+
+/* 2. PREMIUM NAVIGATION DRAWER AS DISPLAYED IN 7269.JPG */
+.sidebar-navigation {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-clean);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-panel {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-clean);
+}
+
+.sidebar-logo { font-size: 1.4rem; }
+.sidebar-brand-panel h3 { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); }
+.sidebar-brand-panel p { font-size: 0.65rem; color: var(--text-muted); }
+
+.sidebar-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 1.5rem;
+    flex-grow: 1;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.menu-link:hover, .menu-link.active-link {
+    background-color: #1e293b;
+    color: var(--text-primary);
+}
+
+.menu-link.active-link {
+    background: linear-gradient(90deg, #1e293b, #151f32);
+    border-left: 3px solid var(--pure-blue);
+    font-weight: 600;
+}
+
+.link-icon { margin-right: 0.75rem; font-size: 1rem; }
+
+.sidebar-badge {
+    margin-left: auto;
+    background-color: var(--pure-red);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+/* SIDEBAR FOOTER PLACEMENT STYLINGS */
+.sidebar-footer-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-clean);
+}
+
+.system-operational-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
+
+.status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--pure-green);
+    box-shadow: 0 0 8px var(--pure-green);
+}
+
+.timestamp-box label { font-size: 0.65rem; color: var(--text-muted); display: block; }
+.timestamp-box p { font-size: 0.75rem; font-weight: 600; }
+
+.sidebar-action-btn, .sidebar-collapse-btn {
+    background: #1e293b;
+    color: #fff;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+body.modal-open {
+    overflow: hidden !important;
+}
+
+/* ADJUST MAIN VIEWPORT WINDOW BOX AREA */
+.cyber-shell { 
+    flex-grow: 1;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 1.25rem 1.5rem; /* Compressed padding slightly to reclaim premium screen ratio space */
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* AVATAR ANCHORS & PROFILE BADGE AREA */
+.profile-badge-anchor {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--border-clean);
+}
+
+.avatar-frame {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-clean);
+}
+
+.profile-text-labels { display: flex; flex-direction: column; }
+.profile-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+.profile-role { font-size: 0.7rem; color: var(--text-muted); }
+
+/* EXTRA ACCESSORIES: SEARCH COMPONENT DECK BAR */
+.search-container-box { position: relative; display: flex; align-items: center; }
+.search-container-box input {
+    background: #111827;
+    border: 1px solid var(--border-clean);
+    padding: 0.45rem 1rem 0.45rem 2.25rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.8rem;
+    width: 220px;
+    outline: none;
+}
+.search-magnifier { position: absolute; left: 10px; color: var(--text-muted); font-size: 0.85rem; }
+.menu-hamburger { font-size: 1.2rem; color: var(--text-muted); cursor: pointer; margin-right: 0.25rem; }
+.title-badge-count { background: var(--pure-red); font-size: 0.75rem; padding: 0.1rem 0.45rem; border-radius: 12px; font-weight: 700; color: white; vertical-align: middle; }
+
+.neon-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 1px solid var(--border-clean); 
+    padding-bottom: 1rem; 
+    margin-bottom: 0.5rem; 
+}
+.brand-matrix { display: flex; gap: 1.2rem; align-items: center; }
+h1 { font-size: 1.6rem; font-weight: 800; color: var(--text-primary); }
+.system-status { font-size: 0.85rem; font-weight: 600; color: var(--pure-blue); margin-top: 0.2rem; }
+.action-dock { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+
+/* ─── COMPACT ONE-ROW MANAGEMENT CONTROL BAR ─── */
+.action-dock {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.35rem !important; /* Tightens space to keep all 4 elements locked in a single row */
+}
+
+.dock-btn {
+    padding: 0.45rem 0.75rem !important; /* Reduced padding space footprint */
+    font-size: 0.78rem !important;
+    font-family: monospace !important;
+    font-weight: 700 !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.dock-btn:hover {
+    transform: translateY(-1px) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* ⚙️ Global Config Button (Sleek Slate Accent) */
+.param-config-btn {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #94a3b8 !important;
+}
+.param-config-btn:hover {
+    border-color: var(--pure-blue) !important;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* 🔄 Refresh Button (Electric Teal Accent) */
+.manual-refresh-btn {
+    background: rgba(0, 240, 255, 0.08) !important;
+    border: 1px solid rgba(0, 240, 255, 0.25) !important;
+    color: #00f0ff !important;
+}
+.manual-refresh-btn:hover {
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* ➕ Add Site Button (Mint Matrix Accent) */
+.dynamic-add-btn {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+    color: var(--pure-green) !important;
+}
+.dynamic-add-btn:hover {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* 🗑️ Recycle Bin Button (Decommissioned Slate Crimson Accent) */
+.active-trash-btn {
+    background: rgba(239, 68, 68, 0.06) !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+    color: #f87171 !important;
+}
+.active-trash-btn:hover {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important;
+}
+
+.bulk-administration-dock input[type="checkbox"] {
+    accent-color: #000000;
+}
+
+.summary-matrix { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1.5rem; 
+    margin-bottom: 2.5rem; 
+}
+
+.panel-node { 
+    background: var(--panel-bg); 
+    border: 1px solid var(--border-clean); 
+    padding: 1rem 1.25rem; 
+    border-radius: 8px;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    min-height: 85px; 
+}
+.panel-node .label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; letter-spacing: 0.5px; }
+.panel-node .value { font-size: 2.4rem; font-weight: 800; color: var(--text-primary); display: block; margin-top: 0.1rem; }
+.panel-node.status-good { border-top: 4px solid var(--pure-green); }
+.panel-node.status-bad { border-top: 4px solid var(--pure-red); }
+
+.split-viewport-layout { 
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Adds a nice clean custom scrollbar for your data ledger items list */
+.compact-list-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+.compact-list-wrapper::-webkit-scrollbar-track {
+    background: #0b111e;
+}
+.compact-list-wrapper::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+.grid-viewport-left { min-width: 0; display: flex; flex-direction: column; gap: 2.5rem; }
+
+.alert-view-tier { 
+    border: 1px solid var(--border-clean); 
+    padding: 0.75rem; 
+    border-radius: 8px; 
+    background: var(--panel-bg);
+    height: auto !important;          /* Overrides hardcoded height and collapses the panel */
+    min-height: unset !important;      /* Removes any minimum default heights */
+    display: flex;
+    flex-direction: column;
+}
+.tier-heading { font-size: 1.1rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-clean); padding-bottom: 0.5rem; }
+.nominal-title { color: var(--pure-green); }
+
+/* COMPACT ARCHITECTURE MODULE GRID OVERRIDES */
+.compact-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    height: auto !important;
+    max-height: 480px;                 /* Allows inner scrolling if list grows long */
+    overflow-y: auto;
+}
+
+/* COMPRESSED HIGH-DENSITY ROWS LIKE THE MOCKUP DESIGN */
+.compact-list-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-clean);
+    padding: 0.4rem 1rem;       /* Cut down from 1rem to 0.4rem for tight rows */
+    margin-bottom: 0.25rem;     /* Small gap to prevent scrolling block overflows */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.row-node-name {
+    font-size: 0.85rem;         /* Scaled down to prevent double-line wrapping */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.row-node-url {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: monospace;
+}
+
+.row-right-content {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;               /* Pulled elements closer together */
+}
+
+.row-data-span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+/* SHRINK METRICS SUMMARY GRIDS TO KEEP THEM ON ONE SCREEN LINE */
+.summary-matrix {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr) !important; /* Forces all 8 metric blocks onto 1 single line */
+    gap: 0.5rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.panel-node {
+    padding: 0.5rem 0.75rem !important;
+    min-height: 65px !important;    /* Dropped from 85px to keep upper layout tiny */
+}
+
+.panel-node .label {
+    font-size: 0.6rem !important;
+}
+
+.panel-node .value {
+    font-size: 1.3rem !important;   /* Cleaner number scale */
+    margin-top: 0;
+}
+
+.compact-list-row-item:hover {
+    border-color: var(--text-primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    transform: translateY(-1px);
+}
+
+.row-left-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.row-node-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.row-node-url {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: monospace;
+}
+
+.row-right-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.row-data-span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: monospace;
+    color: var(--text-muted);
+}
+
+.row-action-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--pure-red);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.2rem;
+    transition: transform 0.15s ease;
+}
+
+.row-action-delete-btn:hover {
+    transform: scale(1.2);
+}
+
+/* STATE SPANS */
+.state-indicator { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; }
+.state-indicator.ONLINE { color: var(--pure-green); background: rgba(40, 167, 69, 0.1); }
+.state-indicator.OFFLINE { color: var(--pure-red); background: rgba(220, 53, 69, 0.1); }
+
+.control-side-deck { display: flex; flex-direction: column; gap: 1.5rem; }
+.deck-inner-card { 
+    background: var(--panel-bg); 
+    border: 1px solid var(--border-clean); 
+    padding: 1.5rem; 
+    border-radius: 6px;
+    min-height: 160px; 
+    display: flex; 
+    flex-direction: column; 
+}
+.deck-inner-card .label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: block; letter-spacing: 0.5px; }
+.canvas-holder { width: 100%; height: 110px; margin-top: 0.5rem; position: relative; }
+
+.log-terminal { 
+    background: #ffffff; 
+    border: 1px solid var(--border-clean); 
+    border-radius: 4px; 
+    padding: 1rem; 
+    font-size: 0.8rem; 
+    font-family: monospace;
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.6rem; 
+    max-height: 480px; 
+    overflow-y: auto;
+}
+.log-terminal {   
+    background: #111827; 
+    border: 1px solid var(--border-clean); 
+}
+
+.cyber-modal-layer { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: none; 
+    justify-content: center; 
+    align-items: center;    
+    z-index: 100000; 
+    padding: 1rem; 
+    overflow-y: hidden;     
+}
+
+.cyber-modal-layer.active { 
+    display: flex !important; 
+}
+
+/* ─── GLASS GLASS CONTAINER MODAL OVERRIDES ─── */
+.glass-container { 
+    background: linear-gradient(145deg, #0f172a 0%, #070c16 100%) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important; 
+    border-radius: 12px !important; 
+    width: 480px; 
+    max-width: 100%; 
+    padding: 2rem; 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 130, 246, 0.15) !important; 
+    max-height: 85vh;
+    overflow-y: auto;    
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #f8fafc !important;
+}
+
+/* Title head adjustments */
+.glass-container h2 {
+    color: #00f0ff !important;
+    font-family: monospace;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+/* Style Form Inputs & Select elements for Add Site and Global Config */
+.glass-container .input-block input, 
+.glass-container .input-block select {
+    background: #040811 !important;
+    border: 1px solid #1e293b !important;
+    color: #ffffff !important;
+    padding: 0.75rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease;
+}
+
+.glass-container .input-block input:focus, 
+.glass-container .input-block select:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* Beautiful custom style for the Recycle Bin file item lists */
+#trash-list-container {
+    background: #040811 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 6px !important;
+}
+
+#trash-list-container > div {
+    border-bottom: 1px solid #1e293b !important;
+    transition: background 0.2s ease;
+}
+
+#trash-list-container > div:hover {
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* Form Action Buttons Adjustments */
+.glass-container .execute-btn {
+    background: linear-gradient(90deg, #10b981, #059669) !important;
+    border: none !important;
+    color: white !important;
+    font-family: monospace;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    transition: all 0.2s ease;
+}
+
+.glass-container .execute-btn:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+}
+
+.glass-container .abort-btn {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #94a3b8 !important;
+    transition: all 0.2s ease;
+}
+/* ─── GLOBAL CONFIG MODAL TRANSPARENT CYBERPUNK SCROLLBAR ─── */
+
+/* 1. Set the thickness of the vertical scrollbar track inside modals */
+.glass-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 2. Style the background track path of the modal scrollbar */
+.glass-container::-webkit-scrollbar-track {
+    background: #040811; /* Sleek pitch-black background to sit clean against the dark card */
+    border-radius: 10px;
+}
+
+/* 3. Style the moving slider thumb handle */
+.glass-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #3b82f6 0%, #00f0ff 100%); /* Neon electrical cyan gradient glow */
+    border-radius: 10px;
+    border: 1px solid #070c16; /* Separation border seam line */
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4); /* High contrast core neon lighting blur */
+    transition: background 0.2s ease;
+}
+
+/* 4. Brighter hover lighting blur effect when cursor sweep interaction happens */
+.glass-container::-webkit-scrollbar-thumb:hover {
+    background: #00f0ff;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.8);
+}
+
+.modal-top-bar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 1.5rem; 
+    user-select: none;
+}
+.exit-btn { 
+    background: none; 
+    border: none; 
+    color: var(--text-muted); 
+    font-size: 1.3rem; 
+    font-weight: 700;
+    cursor: pointer; 
+    transition: color 0.2s ease, background 0.2s ease;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    line-height: 1rem;
+}
+.exit-btn:hover {
+    color: var(--pure-red) !important;
+    background: rgba(220, 53, 69, 0.08);
+}
+
+.input-block { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.input-block label { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); }
+.input-block input { background: #ffffff; border: 1px solid var(--border-clean); padding: 0.8rem; color: #000; border-radius: 4px; font-size: 0.9rem; }
+.input-block input:focus { border-color: #000000; outline: none; }
+.checkbox-block { flex-direction: row; align-items: center; gap: 0.75rem; cursor: pointer; margin-top: 0.5rem; }
+.checkbox-block input { width: 18px; height: 18px; cursor: pointer; }
+
+.form-actions-dock { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
+
+.abort-btn { 
+    background: #ffffff; 
+    color: #000000; 
+    border: 1px solid var(--border-clean); 
+    padding: 0.6rem 1.2rem; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.abort-btn:hover, .abort-btn:active {
+    background: var(--pure-red) !important;
+    border-color: var(--pure-red) !important;
+    color: #ffffff !important;
+}
+
+.execute-btn { background: #000000; color: #ffffff; padding: 0.6rem 1.2rem; font-weight: bold; border-radius: 4px; border: 1px solid #000000; cursor: pointer; }
+
+/* FLOATING NOTIFICATION BANNER STYLES */
+#toast-notification-center {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+.cyber-toast-banner {
+    pointer-events: auto;
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #000000;
+    border-left: 6px solid var(--pure-blue);
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    width: 320px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cyber-toast-banner.slide-in-active {
+    transform: translateX(0);
+}
+
+.cyber-toast-banner.toast-alert { border-left-color: var(--pure-red); }
+.cyber-toast-banner.toast-warning { border-left-color: var(--warning-yellow); }
+.cyber-toast-banner.toast-success { border-left-color: var(--pure-green); }
+
+.toast-meta-row { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-family: monospace; }
+.toast-msg-body { font-size: 0.85rem; font-weight: 700; line-height: 1.25rem; }
+
+@media (max-width: 992px) {
+    body { padding: 1rem 1rem 5rem 1rem; } 
+    .neon-header { flex-direction: column; align-items: flex-start; gap: 1.25rem; padding-bottom: 1rem; }
+    .action-dock { width: 100%; gap: 0.5rem; }
+    .dock-btn { flex: 1 1 calc(50% - 0.5rem); text-align: center; padding: 0.75rem 0.5rem; font-size: 0.8rem; }
+    
+    .summary-matrix { grid-template-columns: 1fr; gap: 1rem; }
+    .split-viewport-layout { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .grid-viewport-left { width: 100%; gap: 1.5rem; }
+    .mobile-console-trigger-bar { display: block; }
+    #mobile-responsive-aside-deck {
+        position: fixed; bottom: -100%; left: 0; width: 100%; height: 70vh; background: #ffffff; z-index: 998; padding: 1.5rem; border-top: 3px solid var(--text-primary); border-radius: 16px 16px 0 0; overflow-y: auto; box-shadow: 0 -8px 25px rgba(0,0,0,0.15); transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #mobile-responsive-aside-deck.active-mobile-drawer { bottom: 58px; }
+    .deck-inner-card { min-height: auto; margin-bottom: 1rem; }
+    .log-terminal { max-height: 250px; }
+}.website-table-container{
+    margin-top:20px;
+    background:#fff;
+    border-radius:8px;
+    overflow-x:auto;
+    border:1px solid #d0d7de;
+}
+
+.website-monitor-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.website-monitor-table th{
+    background:#0F2A47;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+.website-monitor-table td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.up{
+    color:green;
+    font-weight:bold;
+}
+
+.down{
+    color:red;
+    font-weight:bold;
+}
+/* =========================
+   RESPONSE TIME ANALYTICS
+========================= */
+
+/* ==========================================================================
+   COMPACT VIEW PORT MATRIX & NAVIGATION EFFECTS MODIFICATIONS (7269.JPG)
+   ========================================================================== */
+
+/* 1. ANIMATION SEAMS FOR PREMIUM NAVIGATION DRAWER */
+.menu-link {
+    position: relative;
+    overflow: hidden;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+
+/* Glimmer slide tracker accent line border */
+.menu-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 3px;
+    background-color: var(--pure-blue);
+    transform: scaleY(0);
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 4px 4px 0;
+}
+
+.menu-link.active-link::before {
+    transform: scaleY(1);
+}
+
+/* Micro-interaction scale click response pulse loop */
+@keyframes dashboardLinkPulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.97); background-color: rgba(59, 130, 246, 0.12); }
+    100% { transform: scale(1); }
+}
+
+.menu-link.menu-link-pulse {
+    animation: dashboardLinkPulse 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. DYNAMIC SINGLE-SCREEN LAYER CONFIGURATION CONTROLLERS */
+.bulk-administration-dock,
+.summary-matrix,
+#main-viewport-split-matrix {
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease-in-out;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hardware accelerated hide toggle rule for inactive screen tabs */
+.view-hidden-state {
+    display: none !important;
+    opacity: 0 !important;
+    transform: translateY(8px) !important;
+}
+
+/* 3. CORE RESOLUTIONS FOR THE ROW DISPLAY CONFLICT IN YOUR MESH OVERLAY */
+.compact-list-row-item .row-node-name {
+    font-size: 0.85rem !important;  /* Locks font size to single line to prevent overlap */
+    font-weight: 700;
+}
+
+.compact-list-row-item .row-data-span {
+    font-size: 0.75rem !important; /* Compresses text labels down horizontally */
+    color: var(--text-primary) !important;
+}
+
+.compact-list-row-item .row-right-content {
+    gap: 0.85rem !important;       /* Pulls grid items closer to reclaim spacing gaps */
+}
+
+/* High-density internal scroll paths custom setup */
+.compact-list-wrapper::-webkit-scrollbar, 
+.log-terminal::-webkit-scrollbar { 
+    width: 4px; 
+}
+.compact-list-wrapper::-webkit-scrollbar-track, 
+.log-terminal::-webkit-scrollbar-track { 
+    background: #0b111e; 
+}
+/* --- CYBERPUNK MINIMALIST TRACK SCROLLBARS --- */
+/* ─── ADVANCED INTERACTIVE SCROLLBAR ENGINE ─── */
+
+/* 1. Universal Variable Configuration for smooth layout scaling */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* 2. Base Dimensions: Sleek 5px profile line on standby to maximize your widescreen view state */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3. Track Layer: Pitch-black canvas profile that perfectly matches your dashboard's deep navy color */
+::-webkit-scrollbar-track {
+    background: #040811;
+    border-radius: 8px;
+}
+
+/* 4. Moving Thumb Handle: Semi-transparent cyan with low neon blur glow output on standby */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.4) 0%, rgba(0, 240, 255, 0.4) 100%);
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+}
+
+/* 5. HOVER EXPANSION FEATURE: Becomes fully saturated and expands bright glow visibility mechanics */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #3b82f6 0%, #00f0ff 100%);
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.7);
+}
+
+/* 6. ACTIVE DRAG STATE: Changes colors into electric green to signify active interaction */
+::-webkit-scrollbar-thumb:active {
+    background: var(--pure-green, #10b981);
+    box-shadow: 0 0 16px var(--pure-green);
+}
+/* ─── ⚡ ADVANCED OPERATIONS CONSOLE TERMINAL ENGINE STYLES ─── */
+.cyber-terminal-card {
+    animation: terminalConsoleCardBootIntro 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: center;
+}
+
+/* Moving laser scanning trace line matching your target screens */
+.grid-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #0066ff, #10b981, transparent);
+    opacity: 0.4;
+    animation: executeRadarVerticalMatrixScan 4.5s linear infinite;
+    pointer-events: none;
+}
+
+/* Neon input focus acceleration transitions */
+.input-block input:focus {
+    border-color: #0066ff !important;
+    box-shadow: 0 0 10px rgba(0, 102, 255, 0.3);
+    transition: all 0.25s ease-in-out;
+}
+
+/* Interactive transitions for buttons */
+#initialize-system-btn:hover {
+    box-shadow: 0 0 15px rgba(35, 134, 54, 0.4);
+    filter: brightness(1.1);
+}
+
+/* INJECT: CUSTOM HOVER TRANSITIONS FOR PANDU PROMPT SUGGEST CHIPS */
+.chinnu-prompt-suggest-chip:hover {
+    background: #1e293b !important;
+    color: #00f0ff !important;
+    border-color: #00f0ff !important;
+    transform: translateX(2px);
+    transition: all 0.2s ease;
+}
+
+/* ─── VISUAL EFFECT KEYFRAME TRACKS ─── */
+@keyframes terminalConsoleCardBootIntro {
+    0% { opacity: 0; transform: scale(0.96) translateY(10px); filter: blur(4px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes executeRadarVerticalMatrixScan {
+    0% { top: -5%; }
+    100% { top: 105%; }
+}
+/* Custom properties class selector mapping for premium admin dashboard badge customization */
+.profile-badge-anchor {
+    background: rgba(21, 31, 50, 0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-clean);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-badge-anchor:hover {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: var(--pure-blue);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
+}
+
+#system-logout-action-btn {
+    background: var(--pure-red);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+#system-logout-action-btn:hover {
+    filter: brightness(1.2);
+    transform: scale(1.04);
+}
+/* ─── CHINNU CHAT BOX CYBERPUNK SCROLLBAR CUSTOMIZATION ─── */
+
+/* 1. Set the thickness/width of the vertical scrollbar track line */
+#chinnu-chat-screen-logs::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 2. Style the background path container of the scrollbar */
+#chinnu-chat-screen-logs::-webkit-scrollbar-track {
+    background: #040811; /* Matches the ultra dark background of the chat box exactly */
+    border-radius: 10px;
+}
+
+/* 3. Style the moving slider handle thumb element */
+#chinnu-chat-screen-logs::-webkit-scrollbar-thumb {
+    background: var(--pure-blue, #00f0ff); /* Electrical glowing accent color */
+    border-radius: 10px;
+    border: 1px solid #070c16; /* Adds a clean edge separation line tint */
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.5); /* Neon glow radiance effect */
+    transition: background 0.2s ease;
+}
+
+/* 4. Make the slider handle thumb glow brighter on hover interaction */
+#chinnu-chat-screen-logs::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6; /* Brighter electrical blue when hovered */
+    box-shadow: 0 0 14px rgba(59, 130, 246, 0.8);
+}
+/* ─── HIGHLIGHTED ROUND BALLED AVATAR INTERFACE SYSTEM ─── */
+.avatar-letter-ball {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00f0ff 0%, #3b82f6 100%);
+    color: #0b111e;
+    font-weight: 900;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    font-family: monospace;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+#interactive-admin-profile-badge {
+    padding: 2px 8px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+#interactive-admin-profile-badge:hover .avatar-letter-ball {
+    transform: scale(1.08);
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.7);
+    border-color: #ffffff;
+}
+/* ─── DOWN-ACCORDION INLINE EXTRACTION EXTENSION TRACKS ─── */
+.inline-extraction-details-panel {
+    animation: fadeInInlinePanel 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInInlinePanel {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes textPulseGlow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; text-shadow: 0 0 6px #3b82f6; }
+}
+
+.inline-extraction-details-panel:hover {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15) !important;
+}
+/* ─── ENHANCED SINGLE-ROW MANAGEMENT CONTROLS ─── */
+.action-dock {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.4rem !important; /* Premium unified spacing balance */
+}
+
+.dock-btn {
+    padding: 0.5rem 0.85rem !important; /* Space-optimized high-density profile */
+    font-size: 0.78rem !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-weight: 700 !important;
+    border-radius: 6px !important; /* Rounded corners to match dashboard panels */
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    background-color: var(--panel-bg) !important; /* Natively grounds button backgrounds into the panel palette */
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dock-btn:hover {
+    transform: translateY(-1.5px) !important;
+}
+
+/* ⚙️ Enhanced Global Config (Deep Steel Blue Glow) */
+.param-config-btn {
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    color: var(--text-primary) !important;
+    background: linear-gradient(180deg, #1e293b 0%, #151f32 100%) !important;
+}
+.param-config-btn:hover {
+    border-color: var(--pure-blue) !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.4), inset 0 0 8px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 🔄 Enhanced Refresh (Cyber Electrical Cyan Glow) */
+.manual-refresh-btn {
+    border: 1px solid rgba(0, 240, 255, 0.3) !important;
+    color: #00f0ff !important;
+    background: linear-gradient(180deg, #0f243a 0%, #091326 100%) !important;
+}
+.manual-refresh-btn:hover {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.45), inset 0 0 8px rgba(0, 240, 255, 0.15) !important;
+}
+
+/* ➕ Enhanced Add Site (Matrix Velvet Emerald Glow) */
+.dynamic-add-btn {
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: var(--pure-green) !important;
+    background: linear-gradient(180deg, #0b2e24 0%, #091a15 100%) !important;
+}
+.dynamic-add-btn:hover {
+    border-color: var(--pure-green) !important;
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.45), inset 0 0 8px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* 🗑️ Enhanced Recycle Bin (Coral Crimson Alert Glow) */
+.active-trash-btn {
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    color: #f87171 !important;
+    background: linear-gradient(180deg, #2d191e 0%, #1a0f12 100%) !important;
+}
+.active-trash-btn:hover {
+    border-color: var(--pure-red) !important;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.45), inset 0 0 8px rgba(239, 68, 68, 0.15) !important;
+}

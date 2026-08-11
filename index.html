@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSite Monitor System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+
+            <div id="system-auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #03060f; z-index: 100000; display: grid; grid-template-columns: 1.25fr 0.75fr; padding: 2rem; gap: 2rem; align-items: center; overflow: hidden; font-family: 'Courier New', Courier, monospace;">
+    
+    <div style="position: relative; width: 100%; height: 95%; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #091326 0%, transparent 75%); padding: 1rem;">
+        <canvas id="auth-racing-dashboard-cluster" style="width: 820px; height: 530px; z-index: 2;"></canvas>
+        
+        <div style="position: absolute; bottom: 40px; left: 40px; text-align: left; color: #10b981; font-size: 0.7rem; font-weight: 900; line-height: 1.4; border-left: 3px solid #10b981; padding-left: 8px;">
+            
+        </div>
+    </div>
+
+    <div style="width: 100%; max-width: 440px; justify-self: start; position: relative; z-index: 10;">
+        
+        <div id="auth-login-box" style="display: block; background: linear-gradient(135deg, #070c16 0%, #03050a 100%); border: 2px solid #3b82f6; padding: 2.5rem; color: #fff; box-shadow: 0 0 45px rgba(59, 130, 246, 0.2); clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 15% 100%, 0 85%); border-left: 5px solid #3b82f6; border-bottom: 3px solid #10b981; box-sizing: border-box;">
+            <h2 style="font-size: 1.4rem; margin-bottom: 1.5rem; font-family: monospace; letter-spacing: 0.5px;">🔐 SYSTEM OPERATOR SIGN IN</h2>
+            
+            <div class="input-block" style="margin-bottom: 1rem;">
+                <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">OPERATOR CREDENTIALS EMAIL</label>
+                <input type="email" id="login-email" style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+            </div>
+            
+            <div class="input-block" style="position: relative; margin-bottom: 1.25rem;">
+                <label style="color:#8b949e; font-size:0.7rem; display: block; margin-bottom: 0.25rem;">OPERATOR SECURITY PASSWORD</label>
+                <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                    <input type="password" id="login-pass" style="width:100%; padding:10px; padding-right: 40px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box;">
+                    <button id="toggle-password-visibility-btn" type="button" style="position: absolute; right: 8px; background: transparent; border: none; color: #8b949e; cursor: pointer; font-size: 1rem; outline: none; padding: 4px; display: flex; align-items: center; justify-content: center;">🙈</button>
+                </div>
+            </div>
+
+            <div style="background: #0a0b0e; border: 1px solid #30363d; padding: 0.75rem 1rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; box-sizing: border-box;">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <input type="checkbox" id="auth-captcha-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                    <label for="auth-captcha-checkbox" style="font-size: 0.8rem; color: #cbd5e1; user-select: none; cursor: pointer; font-family: monospace; font-weight: bold;">I'm not a robot</label>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; opacity: 0.65;">
+                    <span style="font-size: 1rem;">🛡️</span>
+                    <span style="font-size: 0.5rem; color: #8b949e; font-family: monospace; font-weight: 800; letter-spacing: 0.2px; margin-top: 0.1rem;">CAPTCHA</span>
+                </div>
+            </div>
+
+            <button id="initialize-system-btn" style="width:100%; background:#238636; color:#fff; border:none; padding:12px; margin-top:1.5rem; cursor:pointer; font-weight:bold; font-family: monospace; transition: all 0.2s ease;">LOGIN</button>
+            
+            <p style="margin-top:1rem; text-align:center; font-size:0.8rem; font-family: monospace;">
+                <span style="color:#0066ff; cursor:pointer; font-weight: bold;" onclick="toggleAuth('register')">Create Account</span> | 
+                <span style="color:#8b949e; cursor:pointer;" onclick="toggleAuth('forgot')">Forgot Password?</span>
+            </p>
+
+            <div style="margin-top: 1.5rem; border-top: 1px solid #30363d; padding-top: 1.25rem; text-align: center;">
+                <span style="font-size: 0.65rem; color: #8b949e; font-family: monospace; font-weight: 800; display: block; margin-bottom: 0.75rem; letter-spacing: 0.5px;">OR SECURE IDENTITY SYNC</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <button type="button" id="social-login-google-btn" style="background: #0a0b0e; border: 1px solid #30363d; color: #cbd5e1; font-family: monospace; font-size: 0.7rem; font-weight: bold; padding: 0.6rem; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <span>🌐</span> GOOGLE
+                    </button>
+                    <button type="button" id="social-login-github-btn" style="background: #0a0b0e; border: 1px solid #30363d; color: #cbd5e1; font-family: monospace; font-size: 0.7rem; font-weight: bold; padding: 0.6rem; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <span>🐙</span> GITHUB
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="auth-register-box" style="display:none; background: linear-gradient(135deg, #070c16 0%, #03050a 100%); border: 2px solid #3b82f6; padding: 2.5rem; color: #fff; box-shadow: 0 0 45px rgba(59, 130, 246, 0.2); clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 15% 100%, 0 85%); border-left: 5px solid #3b82f6; border-bottom: 3px solid #10b981; box-sizing: border-box;">
+            <h2 style="font-size: 1.4rem; margin-bottom: 1.5rem; font-family: monospace; letter-spacing: 0.5px;">🔐 CREATE OPERATOR ACCOUNT</h2>
+            <form id="auth-signup-system-form" style="display: flex; flex-direction: column; text-align: left;">
+                <div class="input-block" style="margin-bottom: 1rem;">
+                    <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">OPERATOR DISPLAY NAME</label>
+                    <input type="text" id="reg-name" placeholder="e.g. sethuran" required style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+                </div>
+                <div class="input-block" style="margin-bottom: 1rem;">
+                    <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">OPERATOR EMAIL ADDRESS</label>
+                    <input type="email" id="reg-email" placeholder="operator@wsms.local" required style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+                </div>
+                <div class="input-block" style="margin-bottom: 1rem;">
+                    <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">OPERATOR ACCESS PASSWORD</label>
+                    <input type="password" id="reg-pass" placeholder="Minimum 6 characters" required style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+                </div>
+                <div class="input-block" style="margin-bottom: 1.25rem;">
+                    <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">CONFIRM SECURITY PASSWORD</label>
+                    <input type="password" id="reg-confirm-pass" placeholder="Re-enter security password" required style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+                </div>
+                <button type="submit" id="reg-submit-btn" style="width:100%; background:#238636; color:#fff; border:none; padding:12px; margin-top:0.5rem; cursor:pointer; font-weight:bold; font-family: monospace; transition: all 0.2s ease;">CREATE ACCOUNT</button>
+            </form>
+            <p onclick="toggleAuth('login')" style="cursor:pointer; text-align:center; margin-top:1.25rem; color:#8b949e; font-family: monospace; font-size: 0.8rem;">Back to Login</p>
+        </div>
+
+        <div id="auth-forgot-box" style="display:none; background: linear-gradient(135deg, #070c16 0%, #03050a 100%); border: 2px solid #3b82f6; padding: 2.5rem; color: #fff; box-shadow: 0 0 45px rgba(59, 130, 246, 0.2); clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 15% 100%, 0 85%); border-left: 5px solid #3b82f6; border-bottom: 3px solid #10b981; box-sizing: border-box;">
+            <h2 style="font-size: 1.4rem; margin-bottom: 1.5rem; font-family: monospace; letter-spacing: 0.5px;">🔐 RECOVER ACCESS</h2>
+            <div class="input-block" style="margin-bottom: 1rem;">
+                <label style="color:#8b949e; font-size:0.7rem; font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.3rem;">OPERATOR EMAIL</label>
+                <input type="email" id="forgot-email" placeholder="Enter your email" style="width:100%; padding:10px; background:#0a0b0e; border:1px solid #30363d; color:#fff; box-sizing: border-box; outline: none; font-family: monospace;">
+            </div>
+            <button id="forgot-submit-btn" style="width:100%; background:#0066ff; color:#fff; border:none; padding:12px; margin-top:1.5rem; cursor:pointer; font-weight:bold; font-family: monospace;">DISPATCH RECOVERY LINK</button>
+            <p onclick="toggleAuth('login')" style="cursor:pointer; text-align:center; margin-top:1rem; color:#8b949e; font-family: monospace; font-size: 0.8rem;">Back to Login</p>
+        </div>
+
+    </div>
+</div>
+
+    <div id="toast-notification-center"></div>
+
+    
+
+    <div class="dashboard-root-wrapper">
+        <aside class="sidebar-navigation" style="display: flex; flex-direction: column;">
+            <div class="sidebar-brand-panel">
+                <span class="sidebar-logo">🖥️</span>
+                <div>
+                    <h3>WSMS</h3>
+                    <p>Web Site Monitor System</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu-links" style="flex-grow: 0; margin-bottom: 0.5rem;">
+                <a href="#" class="menu-link active-link"><span class="link-icon">🎛️</span> Dashboard</a>
+                <a href="#" class="menu-link"><span class="link-icon">🌐</span> Websites</a>
+                <a href="#" class="menu-link"><span class="link-icon">📜</span> Monitoring Logs</a>
+                <a href="#" class="menu-link"><span class="link-icon">🔒</span> SSL Monitoring</a>
+                <a href="#" class="menu-link"><span class="link-icon">⚠️</span> Alerts</a>
+<a href="#" class="menu-link"><span class="link-icon">📈</span> Analytics</a>
+<a href="#" class="menu-link" id="menu-link-incidents"><span class="link-icon">🚨</span> Incident Reports</a>
+</nav>
+
+<div id="incidents-reporting-view" class="view-hidden-state" style="padding: 1rem; background: #111827; border: 1px solid var(--border-clean); border-radius: 6px;">
+    <div style="border-bottom: 1px solid var(--border-clean); padding-bottom: 0.75rem; margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="color: #fff; font-size: 1.1rem; margin: 0;">🚨 Outage Management & Incident Dispatch reports</h2>
+            <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0.2rem 0 0 0; font-family: monospace; letter-spacing: 0.5px;">INCIDENT_RESPONSE_CRITICAL_LOGS_STREAM</p>
+        </div>
+        <div>
+            <button id="trigger-incident-simulation-btn" type="button" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--pure-red); font-family: monospace; font-size: 0.72rem; font-weight: bold; padding: 0.45rem 0.9rem; border-radius: 4px; cursor: pointer;">⚡ BROADCAST CRITICAL ALERTS</button>
+        </div>
+    </div>
+    
+    <div id="incidents-deck-grid-container" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 480px; overflow-y: auto;">
+        </div>
+</div>
+
+            
+
+           <div class="sidebar-footer-controls" style="margin-top: auto; padding-top: 0; border-top: none;">
+                </div>
+        </aside>
+
+        <div class="cyber-shell">
+            <header class="neon-header">
+                <div class="brand-matrix">
+                    <div class="menu-hamburger">☰</div>
+                    <div>
+                        <h1>Alerts <span class="title-badge-count">12</span></h1>
+                        <p class="system-status">Real-time alerts and endpoints status</p>
+                    </div>
+                </div>
+                <div class="action-dock">
+                    <div class="search-container-box">
+                        <input type="text" placeholder="Search websites...">
+                        <span class="search-magnifier">🔍</span>
+                    </div>
+                    <button id="open-global-btn" class="dock-btn global-btn">⚙️ Global Config</button>
+                    <button id="refresh-btn" class="dock-btn" style="background: var(--border-clean); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.6rem 0.9rem; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; margin: 0;">🔄 Refresh</button>
+                    <button id="open-trash-btn" class="dock-btn" style="background: var(--border-clean); color: #fff; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                        🗑️ Recycle Bin (<span id="trash-count">0</span>)
+                    </button>
+                    <button id="open-modal-btn" class="dock-btn launch-btn">➕ Add New Website</button>
+                    
+                   <div class="profile-badge-anchor" id="interactive-admin-profile-badge">
+                        <div style="position: relative; display: inline-block;">
+                            <div class="avatar-letter-ball" id="admin-avatar-letter-ball">A</div>
+                            <span id="admin-status-glow-dot" style="position: absolute; bottom: -1px; right: -1px; width: 8px; height: 8px; background-color: var(--pure-green); border-radius: 50%; border: 2px solid var(--panel-bg); box-shadow: 0 0 8px var(--pure-green);"></span>
+                        </div>
+                        <div class="profile-text-labels">
+                            <span class="profile-name" style="display: flex; align-items: center; gap: 0.25rem;">
+                                <span style="font-size: 0.85rem;">🛡️</span> 
+                                <span class="profile-username-text">Admin</span>
+                            </span>
+
+                            <button id="system-logout-action-btn" style="color: white; border: none; font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; cursor: pointer; margin-top: 2px; font-weight: bold; font-family: monospace;">LOGOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="main-dashboard-view">
+                <section class="bulk-administration-dock" style="display: flex; gap: 1.5rem; align-items: center; background: #151f32; border: 1px solid var(--border-clean); padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                    <div style="font-family: monospace; font-size: 0.75rem; font-weight: 800; background: #0b111e; color: #ffffff; padding: 0.3rem 0.6rem; border-radius: 3px; letter-spacing: 0.5px;">SYSTEM_NODE_SWITCHES</div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; user-select: none;">
+                        <input type="checkbox" id="global-turbo-mode-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="global-turbo-mode-checkbox" style="font-size: 0.85rem; font-weight: 700; color: var(--pure-blue); cursor: pointer;">⚡ Turbo Scan Mode (5s Refresh)</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; user-select: none;">
+                        <input type="checkbox" id="global-filter-stable-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="global-filter-stable-checkbox" style="font-size: 0.85rem; font-weight: 700; color: #a8329b; cursor: pointer;">🔇 Mute Stable Nodes (Anomalies Only)</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; user-select: none; border-left: 1px solid var(--border-clean); padding-left: 1.5rem;">
+                        <input type="checkbox" id="global-strict-firewall-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="global-strict-firewall-checkbox" style="font-size: 0.85rem; font-weight: 700; color: var(--pure-red); cursor: pointer;">🛡️ Strict Firewall Isolation Mode</label>
+                    </div>
+                </section>
+
+                <section class="summary-matrix" style="margin-bottom: 0.5rem;">
+                    <div class="panel-node"><span class="label">TARGET_FLEET</span><span class="value" id="total-sites">00</span></div>
+                    <div class="panel-node status-good"><span class="label">NODES_ONLINE</span><span class="value" id="up-sites">00</span></div>
+                    <div class="panel-node status-bad"><span class="label">OUTAGES_DETECTED</span><span class="value" id="down-sites">00</span></div>
+                    <div class="panel-node" style="border-top: 4px solid var(--pure-blue);"><span class="label">WEIGHTED_AVG_LATENCY</span><span class="value" id="global-weighted-avg">00 ms</span></div>
+                    <div class="panel-node"><span class="label">DNS_LOOKUP</span><span class="value">18 ms</span></div>
+                    <div class="panel-node"><span class="label">TTFB</span><span class="value">95 ms</span></div>
+                    <div class="panel-node"><span class="label">SSL_VALID</span><span class="value">10</span></div>
+                    <div class="panel-node"><span class="label">ACTIVE_ALERTS</span><span class="value">2</span></div>
+                </section>
+
+                <div class="dashboard-features-grid" id="dashboard-charts-panel" style="margin-bottom: 0.75rem;">
+                    <div class="dashboard-feature-card">
+                        <h3>📊 Global Load Velocity Distribution</h3>
+                        <div class="dashboard-chart-box"><canvas id="dashboardPerformanceOverviewChart"></canvas></div>
+                    </div>
+                    <div class="dashboard-feature-card">
+                        <h3>🛡️ Security Mesh Events Log</h3>
+                        <div class="security-status-list">
+                            <div class="security-item"><span style="color: var(--text-muted);">Firewall Block (Malicious)</span><span class="security-tag" style="color: var(--pure-red);">REJECT</span></div>
+                            <div class="security-item"><span style="color: var(--text-muted);">SSL TLS Handshake Token</span><span class="security-tag" style="color: var(--pure-green);">SECURE</span></div>
+                            <div class="security-item"><span style="color: var(--text-muted);">High Latency Deviation</span><span class="security-tag" style="color: var(--warning-yellow);">WARN</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="split-viewport-layout" id="main-viewport-split-matrix" style="display: block; width: 100%;">
+                    <main class="grid-viewport-left" style="width: 100%;">
+                        <div class="alert-view-tier">
+                            <h2 class="tier-heading nominal-title" id="fleet-mesh-title" style="color: #fff; font-size: 1rem; border-bottom: 1px solid var(--border-clean); padding-bottom: 0.5rem; margin-bottom: 1rem;">LIVE TELEMETRY FLEET CONTROL MESH</h2>
+                            <div class="compact-list-wrapper" id="compact-list-container" style="max-height: 480px; overflow-y: auto;"></div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+            <div id="monitoring-logs-view" class="view-hidden-state" style="padding: 1rem; background: #111827; border: 1px solid var(--border-clean); border-radius: 6px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-clean); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h2 style="color: #fff; font-size: 1.1rem; margin: 0;">📜 System Event & Operational Monitoring Logs</h2>
+                        <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0.2rem 0 0 0; font-family: monospace; letter-spacing: 0.5px;">SYSTEM_OPERATIONAL_LOGS_STREAM</p>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                        <input type="text" id="log-search-filter" placeholder="🔍 Search logs by node, status..." style="background: #0b111e; border: 1px solid var(--border-clean); color: #fff; font-family: monospace; font-size: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 4px; outline: none; width: 200px;">
+                        
+                        <select id="log-severity-filter" style="background: #0b111e; border: 1px solid var(--border-clean); color: var(--pure-blue); font-family: monospace; font-size: 0.75rem; padding: 0.4rem 0.6rem; border-radius: 4px; outline: none; cursor: pointer; font-weight: bold;">
+                            <option value="ALL">🔍 LEVEL: ALL_LOGS</option>
+                            <option value="NOMINAL">🟢 LEVEL: NOMINAL_ONLY</option>
+                            <option value="ANOMALY">⚡ LEVEL: ANOMALIES_ONLY</option>
+                            <option value="CRITICAL">🚨 LEVEL: CRITICAL_ERRORS</option>
+                        </select>
+
+                        <button id="toggle-log-freeze-btn" type="button" style="background: #1e293b; border: 1px solid var(--border-clean); color: #94a3b8; font-family: monospace; font-size: 0.72rem; font-weight: bold; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;">⏸️ PAUSE_FEED</button>
+                        <button id="clear-log-memory-btn" type="button" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--pure-red); font-family: monospace; font-size: 0.72rem; font-weight: bold; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer;">🗑️ PURGE_LOGS</button>
+                    </div>
+                </div>
+
+                <div id="logs-view-container" style="max-height: 480px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.35rem; padding-right: 0.25rem;">
+                    </div>
+            </div>
+
+            <div id="ssl-monitoring-view" class="view-hidden-state" style="padding: 1rem; background: #111827; border: 1px solid var(--border-clean); border-radius: 6px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-clean); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h2 style="color: #fff; font-size: 1.1rem; margin: 0;">🔒 Security Handshake & SSL Monitoring Mesh</h2>
+                        <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0.2rem 0 0 0; font-family: monospace; letter-spacing: 0.5px;">SSL_CERTIFICATE_VALIDATION_MATRIX</p>
+                    </div>
+                    <div>
+                        <button id="trigger-bulk-ssl-sync-btn" type="button" style="background: rgba(0, 102, 255, 0.12); border: 1px solid rgba(0, 102, 255, 0.3); color: var(--pure-blue); font-family: monospace; font-size: 0.72rem; font-weight: bold; padding: 0.45rem 0.9rem; border-radius: 4px; cursor: pointer; transition: opacity 0.2s;">⚡ REVALIDATE_ALL_CERTS</button>
+                    </div>
+                </div>
+
+                <div id="ssl-grid-view-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; max-height: 480px; overflow-y: auto; padding-right: 0.25rem;">
+                    </div>
+            </div>
+
+            <div id="analytics-view" class="view-hidden-state" style="padding: 1rem; background: #111827; border: 1px solid var(--border-clean); border-radius: 6px;">
+                <div style="border-bottom: 1px solid var(--border-clean); padding-bottom: 0.75rem; margin-bottom: 1.2rem;">
+                    <h2 style="color: #fff; font-size: 1.1rem; margin: 0;">📈 Advanced Fleet Metrics & Analytics Logs</h2>
+                    <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0.2rem 0 0 0; font-family: monospace; letter-spacing: 0.5px;">HISTORICAL_UPTIME_TELEMETRY_ENGINE</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: #0b111e; border: 1px solid var(--border-clean); padding: 1rem; border-radius: 6px; text-align: center;">
+                        <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase; font-family: monospace;">TOTAL_MESH_CHECKS_RUN</span>
+                        <strong id="analytics-total-checks" style="font-size: 1.6rem; font-weight: 900; color: #fff; font-family: monospace; display: block; margin-top: 0.3rem;">0</strong>
+                    </div>
+                    <div style="background: #0b111e; border: 1px solid var(--border-clean); padding: 1rem; border-radius: 6px; text-align: center;">
+                        <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase; font-family: monospace;">GLOBAL_FAILURE_PERCENTAGE</span>
+                        <strong id="analytics-failure-rate" style="font-size: 1.6rem; font-weight: 900; color: var(--pure-red); font-family: monospace; display: block; margin-top: 0.3rem;">0.0%</strong>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem;">
+                    
+                    <div style="background: #0b111e; border: 1px solid var(--border-clean); padding: 1rem; border-radius: 6px;">
+                        <h3 style="color: #fff; font-size: 0.85rem; margin: 0 0 0.8rem 0; font-family: monospace; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;">🏆 RUNNING AVAILABILITY RANKINGS</h3>
+                        <div id="analytics-leaderboard-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            </div>
+                    </div>
+
+                    <div style="background: #0b111e; border: 1px solid var(--border-clean); padding: 1rem; border-radius: 6px; display: flex; flex-direction: column;">
+                        <h3 style="color: #fff; font-size: 0.85rem; margin: 0 0 0.8rem 0; font-family: monospace; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;">📊 STATUS DISTRIBUTION ENGINE</h3>
+                        <div style="flex-grow: 1; height: 200px; position: relative; display: flex; justify-content: center; align-items: center;">
+                            <canvas id="analyticsDistributionPieChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+
+
+    <div class="cyber-modal-layer" id="add-site-modal">
+        <div class="glass-container">
+            <div class="modal-top-bar">
+                <h2 style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.2px;">PROBE CONFIGURATION</h2>
+                <button type="button" id="close-modal-btn" class="exit-btn">✖</button>
+            </div>
+            <form id="add-site-form">
+                <div class="input-block">
+                    <label>Target Monitored Identifier Name</label>
+                    <input type="text" id="site-name-input" placeholder="e.g. Production Main Server" required>
+                </div>
+                <div class="input-block">
+                    <label>Network Endpoint Location (URL)</label>
+                    <input type="url" id="site-url-input" placeholder="https://domain.io" required>
+                </div>
+                <div class="input-block">
+                    <label>Check Interval</label>
+                    <select id="site-interval-input" style="background: #ffffff; border: 1px solid var(--border-clean); padding: 0.8rem; color: #000; border-radius: 4px; font-size: 0.9rem; width: 100%; outline: none; margin-top: 0.2rem;">
+                        <option value="none">⏸️ Pause Monitoring (Standby)</option>
+                        <option value="30s">30 Seconds (Real-time)</option>
+                        <option value="60s" selected>60 Seconds (Standard)</option>
+                        <option value="1min">1 Minute (Fast Scan)</option>
+                        <option value="5min">5 Minutes (Balanced)</option>
+                        <option value="10min">10 Minutes (Optimized)</option>
+                        <option value="30min">30 Minutes (Production Save)</option>
+                    </select>
+                </div>
+                <div class="form-actions-dock">
+                    <button type="button" id="cancel-modal-btn" class="abort-btn">Abort</button>
+                    <button type="submit" class="execute-btn">Deploy Probe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="cyber-modal-layer" id="global-param-modal">
+        <div class="glass-container" id="global-glass-card-element" style="cursor: pointer;" title="Double click header to dock into layout page permanently">
+            <div class="modal-top-bar" id="global-modal-drag-header">
+                <h2 id="global-header-title-text" style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.2px;">GLOBAL SYSTEM PARAMETERS</h2>
+                <button type="button" id="close-global-modal-btn" class="exit-btn">✖</button>
+            </div>
+            <form id="global-param-form">
+                <div class="input-block">
+                    <label>Critical Latency Threshold (ms)</label>
+                    <input type="number" id="global-threshold-input" value="200" required>
+                </div>
+                <div class="input-block">
+                    <label>Alert Level Warning Threshold Time (ms)</label>
+                    <input type="number" id="global-alert-time-input" value="130" required>
+                </div>
+                <div class="input-block">
+                    <label>Adult Filter Flag Threshold Keywords (Comma Separated)</label>
+                    <input type="text" id="global-adult-input" value="adult, restricted, betting, bypass" required>
+                </div>
+                <div class="input-block">
+                    <label>Abnormal Domain DNS Timeout (ms)</label>
+                    <input type="number" id="global-dns-timeout-input" value="25" required>
+                </div>
+
+                <div class="input-block">
+                    <label>🤖 Select Audio Engine Voice Profile</label>
+                    <select id="global-voice-profile-select" style="background: #ffffff; border: 1px solid var(--border-clean); padding: 0.8rem; color: #000; border-radius: 4px; font-size: 0.9rem; width: 100%; outline: none; margin-top: 0.2rem; font-weight: 600;">
+                        <option value="indian_male" selected>Male</option>
+                        <option value="indian_female">Female</option>
+                    </select>
+                </div>
+
+                <div class="input-block">
+                    <label>📡 System Handshake Greeting Profile</label>
+                    <select id="global-voice-command-select" style="background: #ffffff; border: 1px solid var(--border-clean); padding: 0.8rem; color: #000; border-radius: 4px; font-size: 0.9rem; width: 100%; outline: none; margin-top: 0.2rem; font-weight: 600;">
+                        <option value="standard" selected>Option 1: Standard Operational Handshake</option>
+                        <option value="tactical">Option 2: Tactical Security Protocol Boot</option>
+                    </select>
+                </div>
+
+                <div class="input-block checkbox-block">
+                    <label for="global-mute-voice">🔕 Global Audio Mute</label>
+                    <input type="checkbox" id="global-mute-voice">
+                </div>
+                <div class="form-actions-dock" id="global-form-actions-footer">
+                    <button type="button" id="cancel-global-modal-btn" class="abort-btn">Cancel</button>
+                    <button type="submit" class="execute-btn">Apply Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="cyber-modal-layer" id="recycle-bin-modal">
+        <div class="glass-container" style="max-width: 550px;">
+            <div class="modal-top-bar">
+                <h2 style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.2px;">SYSTEM RECYCLE_BIN // DECOMMISSIONED_NODES</h2>
+                <button type="button" id="close-trash-modal-btn" class="exit-btn">✖</button>
+            </div>
+            <div style="margin: 1rem 0; max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.04); padding: 0.8rem; border-radius: 4px; border: 1px solid var(--border-clean);" id="trash-list-container">
+            </div>
+            <div class="form-actions-dock" style="justify-content: flex-end;">
+                <button type="button" id="close-trash-footer-btn" class="abort-btn">Close Terminal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cyber-modal-layer" id="deep-historical-telemetry-modal">
+        <div class="glass-container" style="width: 650px; max-width: 95vw; height: auto; max-height: 90vh;">
+            <div class="modal-top-bar">
+                <h2 id="history-modal-site-title" style="font-size: 1.2rem; font-weight: 800; text-transform: uppercase; color: var(--pure-blue);">NODE DIAGNOSTIC ANALYSIS</h2>
+                <button type="button" id="close-history-modal-btn" class="exit-btn">✖</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: var(--panel-bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-clean); text-align: center;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase;">Uptime Probability</span>
+                    <strong id="history-modal-uptime-val" style="font-size: 1.5rem; font-weight: 800; color: var(--pure-green);">0%</strong>
+                </div>
+                <div style="background: var(--panel-bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-clean); text-align: center;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase;">Stability Variance</span>
+                    <strong id="history-modal-variance-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">0 ms</strong>
+                </div>
+                <div style="background: var(--panel-bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-clean); text-align: center;">
+                    <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase;">Session Alerts</span>
+                    <strong id="history-modal-alerts-count" style="font-size: 1.5rem; font-weight: 800; color: var(--pure-red);">0</strong>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 1rem; margin-bottom: 1.5rem; min-height: 240px;">
+                
+                <div style="background: var(--panel-bg); border-radius: 6px; border: 1px solid var(--border-clean); padding: 1rem; position: relative; height: 100%;">
+                    <canvas id="deepHistoryModalLineChart"></canvas>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; height: 100%;">
+                    <div style="background: var(--panel-bg); border-radius: 6px; border: 1px solid var(--border-clean); padding: 0.6rem 0.8rem; flex: 1; position: relative;">
+                        <span style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase; font-family: monospace; margin-bottom: 4px;">📈 INSTANT_THROUGHPUT_SPEED</span>
+                        <div style="height: 45px; position: relative;"><canvas id="modalSubThroughputBarChart"></canvas></div>
+                    </div>
+                    <div style="background: var(--panel-bg); border-radius: 6px; border: 1px solid var(--border-clean); padding: 0.6rem 0.8rem; flex: 1.3; position: relative;">
+                        <span style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase; font-family: monospace; margin-bottom: 4px;">🎯 HEARTBEAT_STABILITY_RATIO</span>
+                        <div style="height: 65px; position: relative; display: flex; justify-content: center;"><canvas id="modalSubStabilityPieChart"></canvas></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-actions-dock">
+                <button type="button" id="close-history-footer-btn" class="abort-btn" style="width: 100%;">Close Diagnostics Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="chinnu-trigger-floating-btn" style="position: fixed; bottom: 25px; right: 25px; background: #00f0ff; color: #03060f; border: none; padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); z-index: 9999; font-size: 0.85rem;">
+        🤖 Chat with Chinnu
+    </button>
+
+    <div id="chinnu-chat-drawer-panel" style="position: fixed; bottom: 90px; right: 25px; width: 380px; height: 520px; background: #070c16; border: 2px solid #00f0ff; box-shadow: 0 0 30px rgba(0, 240, 255, 0.15); border-radius: 12px; z-index: 9999; display: none; flex-direction: column; overflow: hidden; font-family: sans-serif;">
+        <div style="background: #0b111e; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <div style="width: 32px; height: 32px; background: #00f0ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold;">C</div>
+                <div>
+                    <h4 style="color: #fff; margin: 0; font-size: 0.9rem;">Chinnu Monitor Assistant ✨</h4>
+                    <span style="color: #10b981; font-size: 0.7rem; display: flex; align-items: center; gap: 0.25rem;">● Context Aware System AI</span>
+                </div>
+            </div>
+            <button id="close-chinnu-drawer-btn" style="background: transparent; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer;">✕</button>
+        </div>
+
+        <div id="chinnu-chat-screen-logs" style="flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; background: #040811;">
+            <div style="background: rgba(0, 240, 255, 0.05); border: 1px dashed rgba(0, 240, 255, 0.2); padding: 0.75rem; border-radius: 6px; color: #cbd5e1; font-size: 0.78rem; line-height: 1.35;">
+                👋 Hello! I am connected natively to your live telemetry systems engine. Ask me anything about your current active node metrics or logs memory store profiles.
+            </div>
+        </div>
+
+        <div id="chinnu-chips-wrapper-container" style="padding: 0.5rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; background: #070c16; border-top: 1px solid #1e293b;">
+            <button class="chinnu-prompt-suggest-chip" style="background: #111827; border: 1px solid #1e293b; color: #94a3b8; padding: 0.35rem 0.6rem; border-radius: 4px; font-size: 0.72rem; text-align: left; cursor: pointer;">Which monitored sites are down right now?</button>
+            <button class="chinnu-prompt-suggest-chip" style="background: #111827; border: 1px solid #1e293b; color: #94a3b8; padding: 0.35rem 0.6rem; border-radius: 4px; font-size: 0.72rem; text-align: left; cursor: pointer;">Give me a quick performance summary report.</button>
+        </div>
+
+        <div style="padding: 0.75rem 1rem; background: #0b111e; border-top: 1px solid #1e293b; display: flex; gap: 0.5rem; align-items: center;">
+            <input type="text" id="chinnu-user-input-box" placeholder="Ask Chinnu anything about websites..." style="flex-grow: 1; background: #040811; border: 1px solid #1e293b; padding: 0.55rem; color: #fff; font-size: 0.8rem; border-radius: 6px; outline: none;">
+            <button id="chinnu-send-message-btn" style="background: #00f0ff; border: none; color: #000; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;">➔</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
